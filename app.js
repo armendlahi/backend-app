@@ -1,26 +1,25 @@
 const express = require('express');
+const mongoose = require('mongoose');
+
 const app = express();
+mongoose.connect('mongodb://localhost:27017/BackendDB', {useNewUrlParser: true, useUnifiedTopology: true});
 
-function User(id, username, email, dateOfBirth, country) {
-    this.id = id;
-    this.username = username;
-    this.email = email;
-    this.dateOfBirth = dateOfBirth;
-    this.country = country;
-};
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => console.log('Connected to MongoDB'));
 
-const users = [
-    new User(1, 'username1', 'email1@gmail.com', '1990-05-05', 'Kosova'),
-    new User(2, 'username2', 'email2@gmail.com', '1992-06-06', 'USA'),
-    new User(3, 'username3', 'email3@gmail.com', '1993-07-07', 'Germany'),
-    new User(4, 'username4', 'email4@gmail.com', '1999-08-08', 'Spain')
-];
-
-// http://mywesbsite.com/users => Retrun all users
-// http://mywesbsite.com/users/{id} => Retrun user with id {id}
+const UserModel = mongoose.model('User', {
+    username: String,
+    email: String,
+    dateOfBirth: String,
+    country: String
+});
 
 app.get('/users', (req, res) => {
-    res.json(users);
+    UserModel.find({}, (err, docs) => {
+        console.log(err);
+        res.json(docs);
+    });
 });
 
 app.get('/users/find/:id', (req, res) => {

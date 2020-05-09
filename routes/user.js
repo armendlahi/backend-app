@@ -13,21 +13,18 @@ router.get('/users', (req, res) => {
     });
 });
 
-router.get('/users/find/:id', (req, res) => {
-    const user = users.find(user => user.id == req.params.id);
+router.get('/users/:id', (req, res) => {
+    User.findById(req.params.id, (err, doc) => {
+        if (err) {
+            return res.json({ error: 'An error has occured.' });
+        }
 
-    if (!user) {
-        res.json({ error: 'A user with the given ID was not found.'});
-    } else {
-        res.json(user);
-    }
+        if (!doc) {
+            return res.json({ error: 'A user with the given ID was not found.' });
+        }
+
+        res.json(doc);
+    });
 });
-
-// router.get('/users/create', (req, res) => {
-//     const user = new User(5, 'username5', 'email5@gmail.com', '1990-08-08', 'Kosova');
-//     users.push(user);
-
-//     res.json(user);
-// });
 
 module.exports = router;

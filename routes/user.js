@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const User = require('../models/User');
-// Create Retrieve Update Delete
+
 router.get('/users', (req, res) => {
     let find = {};
 
@@ -66,7 +66,17 @@ router.patch('/users/:id', (req, res) => {
             throw err;
         }
 
-        res.json({ data: "User has been updated." });
+        res.json({ success: "User has been updated." });
+    })
+});
+
+router.delete('/users/:id', (req, res) => {
+    User.remove({ _id: req.params.id }, (err) => {
+        if (err) {
+            throw err;
+        }
+
+        res.json({ success: 'User has been deleted.' });
     })
 });
 

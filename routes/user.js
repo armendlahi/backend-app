@@ -19,6 +19,41 @@ router.get('/users', (req, res) => {
     });
 });
 
+router.post('/users', (req, res) => {
+    const { username, email, dateOfBirth, country } = req.body;
+    const errors = {};
+
+    if (!username) {
+        errors.username = 'Username is required.';
+    }
+
+    if (!email) {
+        errors.email = 'Email is required.';
+    }
+
+    if (!dateOfBirth) {
+        errors.dateOfBirth = 'Date of birth is required.';
+    }
+
+    if (!country) {
+        errors.country = 'Country is required.';
+    }
+
+    if (Object.keys(errors).length !== 0 && errors.constructor === Object) {
+        res.json({ errors });
+    }
+
+    const user = new User({ username, email, dateOfBirth, country });
+
+    user.save((err, user) => {
+        if (err) {
+            throw err;
+        }
+        
+        res.json(user);
+    });
+});
+
 router.get('/users/:id', (req, res) => {
     User.findById(req.params.id, (err, doc) => {
         if (err) {

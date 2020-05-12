@@ -54,6 +54,20 @@ router.post('/users', (req, res) => {
     });
 });
 
+router.get('/users/:id', (req, res) => {
+    User.findById(req.params.id, (err, doc) => {
+        if (err) {
+            return res.json({ error: 'An error has occured.' });
+        }
+
+        if (!doc) {
+            return res.json({ error: 'A user with the given ID was not found.' });
+        }
+
+        res.json(doc);
+    });
+});
+
 router.patch('/users/:id', (req, res) => {
     const { _id } = req.body;
 

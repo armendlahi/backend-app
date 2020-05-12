@@ -15,7 +15,7 @@ router.get('/users', (req, res) => {
             return res.json({ error: 'An error has occured.' });
         }
 
-        res.json(docs);
+        return res.json(docs);
     });
 });
 
@@ -40,7 +40,7 @@ router.post('/users', (req, res) => {
     }
 
     if (Object.keys(errors).length !== 0 && errors.constructor === Object) {
-        res.json({ errors });
+        return res.json({ errors });
     }
 
     const user = new User({ username, email, dateOfBirth, country });
@@ -50,7 +50,7 @@ router.post('/users', (req, res) => {
             throw err;
         }
         
-        res.json(user);
+        return res.json(user);
     });
 });
 
@@ -64,7 +64,7 @@ router.get('/users/:id', (req, res) => {
             return res.json({ error: 'A user with the given ID was not found.' });
         }
 
-        res.json(doc);
+        return res.json(doc);
     });
 });
 
@@ -80,7 +80,7 @@ router.patch('/users/:id', (req, res) => {
             throw err;
         }
 
-        res.json({ success: "User has been updated." });
+        return res.json({ success: "User has been updated." });
     })
 });
 
@@ -90,7 +90,7 @@ router.delete('/users/:id', (req, res) => {
             throw err;
         }
 
-        res.json({ success: 'User has been deleted.' });
+        return res.json({ success: 'User has been deleted.' });
     })
 });
 

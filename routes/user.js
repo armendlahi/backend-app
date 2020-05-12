@@ -4,7 +4,13 @@ const router = express.Router();
 const User = require('../models/User');
 
 router.get('/users', (req, res) => {
-    User.find({}, (err, docs) => {
+    let find = {};
+
+    if ('username' in req.query) {
+        find.username =  new RegExp("^"+ req.query.username);
+    }
+
+    User.find(find, (err, docs) => {
         if (err) {
             return res.json({ error: 'An error has occured.' });
         }

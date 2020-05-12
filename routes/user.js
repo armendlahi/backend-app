@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const User = require('../models/User');
-
+// Create Retrieve Update Delete
 router.get('/users', (req, res) => {
     let find = {};
 
@@ -54,18 +54,20 @@ router.post('/users', (req, res) => {
     });
 });
 
-router.get('/users/:id', (req, res) => {
-    User.findById(req.params.id, (err, doc) => {
+router.patch('/users/:id', (req, res) => {
+    const { _id } = req.body;
+
+    if (_id) {
+        return res.json({ error: "Id cannot be changed." });
+    }
+
+    User.updateOne({ _id: req.params.id }, req.body, (err, doc) => {
         if (err) {
-            return res.json({ error: 'An error has occured.' });
+            throw err;
         }
 
-        if (!doc) {
-            return res.json({ error: 'A user with the given ID was not found.' });
-        }
-
-        res.json(doc);
-    });
+        res.json({ data: "User has been updated." });
+    })
 });
 
 module.exports = router;

@@ -10,7 +10,7 @@ router.get('/users', (req, res) => {
         find.username =  new RegExp("^"+ req.query.username);
     }
 
-    User.find(find, (err, docs) => {
+    User.find(find, null, { sort: {'_id': -1 }}, (err, docs) => {
         if (err) {
             return res.json({ error: 'An error has occured.' });
         }
@@ -40,7 +40,7 @@ router.post('/users', (req, res) => {
     }
 
     if (Object.keys(errors).length !== 0 && errors.constructor === Object) {
-        return res.json({ errors });
+        return res.status(422).json({ errors });
     }
 
     const user = new User({ username, email, dateOfBirth, country });
